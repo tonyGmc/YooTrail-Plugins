@@ -1,5 +1,5 @@
 <template>
-  <a class="btn-a" style="color: red" :class="type" @click="$emit('click', $event)"><slot /></a>
+  <a class="btn-a" :class="type" @click="$emit('click', $event)"><slot /></a>
 </template>
 
 <script>

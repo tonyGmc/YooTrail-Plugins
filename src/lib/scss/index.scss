@@ -1,0 +1,18 @@
+@import './variables.scss';
+.btn-a {
+  cursor: pointer;
+  color: $--color-primary;
+  padding: 4px 6px;
+  &.error {
+    color: $--color-danger;
+  }
+  &.warning {
+    color: $--color-warning;
+  }
+  &.success {
+    color: $--color-success;
+  }
+  &:hover {
+    background: $--background;
+  }
+}

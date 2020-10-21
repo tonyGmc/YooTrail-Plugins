@@ -1,9 +1,10 @@
 var path = require('path')
 var webpack = require('webpack')
 
+console.log(process.env.NODE_ENV === 'development' ? './src/main.js' : './src/lib/index.js')
 module.exports = {
   // entry: './src/main.js',
-  entry: './src/lib/index.js',
+  entry: process.env.NODE_ENV === 'development' ? './src/main.js' : './src/lib/index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
@@ -51,6 +52,10 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+        loader: 'file-loader'
       }
     ]
   },
