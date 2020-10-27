@@ -1,10 +1,30 @@
 import { Message } from 'element-ui'
 import { getToken, getRefreshToken, removeToken } from '../utils/token'
+import { getAppOrgId } from '../utils/index'
+import crypto from 'crypto'
 
 export default ({ $axios, redirect, route, store }) => {
   $axios.onRequest(config => {
     config.baseURL = process.env.BASE_API
     $axios.setHeader('Content-Type', 'application/json')
+
+    const orgInfo = getAppOrgId(route.path, true)
+    if (orgInfo) {
+      try {
+        // 账号凭证通过组织Id与应用Id进行加密生成
+        const { orgId, appId } = orgInfo
+        const accountToken = (orgId || '') + '' + (appId || '')
+        if (accountToken) {
+          const md5 = crypto.createHash('md5')
+          md5.update(accountToken)
+          const hexPass = md5.digest('hex')
+          config.headers.AccountToken = hexPass
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
     config.headers.Authorization = getToken()
   })
 

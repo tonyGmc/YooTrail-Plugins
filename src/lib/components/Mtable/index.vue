@@ -42,50 +42,50 @@ export default {
     storeName: {
       // 表格数据请求地址
       type: String,
-      default: '',
+      default: ''
     },
     isParseParams: {
       // 是否转字符串
       type: Boolean,
-      default: false,
+      default: false
     },
     queryData: {
       // 查询检索字段
       type: Object,
-      default: () => {},
+      default: () => {}
     },
     border: {
       // 是否边框
       type: Boolean,
-      default: false,
+      default: false
     },
     needPagination: {
       // 是否需要分页
       type: Boolean,
-      default: true,
+      default: true
     },
     emptyText: {
       // 无数据提示文字
       type: String,
-      default: '暂无数据',
+      default: '暂无数据'
     },
     headerStyle: {
       // 表头样式
       type: Object,
-      default: () => {},
+      default: () => {}
     },
     tableRowClassName: {
       type: Function,
-      default: () => {},
+      default: () => {}
     },
     isStartload: {
       type: Boolean,
-      default: true,
+      default: true
     },
     subHeight: {
       type: Number,
-      default: 215,
-    },
+      default: 215
+    }
   },
   data() {
     return {
@@ -94,17 +94,17 @@ export default {
       loading: false,
       query: {
         pageSize: 10,
-        pageNum: 1,
+        pageNum: 1
       },
       test: false,
-      tableMaxHeight: 500,
+      tableMaxHeight: 500
     }
   },
   destroyed() {
     window.removeEventListener('resize', this.initHeight, false)
   },
   mounted() {
-    this.$nextTick(function () {
+    this.$nextTick(function() {
       setTimeout(() => {
         this.test = true
       }, 100)
@@ -158,7 +158,7 @@ export default {
       if (this.isParseParams) {
         query = this.parseParams(this.query)
       }
-      this.$store.dispatch(this.storeName, query).then((res) => {
+      this.$store.dispatch(this.storeName, query).then(res => {
         // let reDatas = response.rows
         // if (reDatas === undefined) {
         //   reDatas = response.data.datas.rows
@@ -188,13 +188,13 @@ export default {
     initHeight() {
       const height = document.documentElement.clientHeight
       this.tableMaxHeight = height - this.subHeight
-    },
-  },
+    }
+  }
 }
 </script>
 
 <style lang="scss">
-@import '~yootrial-plugins/src/lib/scss/variables.scss';
+@import '../../scss/variables.scss';
 .tn-table {
   height: 100%;
 }

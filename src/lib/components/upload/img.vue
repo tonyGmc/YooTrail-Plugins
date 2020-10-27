@@ -15,18 +15,18 @@
   </el-upload>
 </template>
 <script>
-import { getToken } from '@/utils/token'
+import { getToken } from '../../utils/token'
 export default {
   data() {
     return {
       Base_Url: process.env.BASE_API + '/base/Rest/file/upload',
       Preview_Url: process.env.BASE_API + '/base/Rest/file/preview',
       headers: {
-        Authorization: getToken(),
+        Authorization: getToken()
       },
       loading: false,
       imageUrl: '',
-      fileCode: '',
+      fileCode: ''
     }
   },
   methods: {
@@ -60,8 +60,8 @@ export default {
       }
       this.loading = true
       return isJpgOrPng && isLt2M
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="scss">
