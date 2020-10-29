@@ -1,6 +1,7 @@
 import BtnA from './components/BtnA.vue'
 import DelBtn from './components/DelBtn.vue'
 import YooImage from './components/YooImage.vue'
+import YooTitle from './components/YooTitle.vue'
 import Page from './components/Page/index.vue'
 import Mtable from './components/Mtable/index.vue'
 import File from './components/upload/file.vue'
@@ -16,6 +17,8 @@ const yootrialPlugins = {
     Vue.component('YooImage', YooImage)
     // 上传文件
     Vue.component('YooUploadFile', File)
+    // 标题
+    Vue.component('YooTitle', YooTitle)
     // 页面框框
     Vue.component('Page', Page)
     // 表格

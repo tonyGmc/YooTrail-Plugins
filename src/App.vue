@@ -1,9 +1,6 @@
 <template>
   <div id="app">
-    <Page>
-      <template slot="title">应用管理</template>
-      <YooImage :src="123123" />
-    </Page>
+    <BtnA :disabled="true">123123</BtnA>
   </div>
 </template>
 
@@ -12,8 +9,6 @@ export default {
   data() {
     return {}
   },
-  created() {
-    console.log(this.$yootrail.newData)
-  }
+  methods: {}
 }
 </script>
