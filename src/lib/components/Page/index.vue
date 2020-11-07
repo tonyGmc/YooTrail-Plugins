@@ -5,9 +5,19 @@
       <el-container class="page-configure relative-full">
         <el-header class="page-configure-header">
           <div class="left">
-            <h3><slot name="title"></slot></h3>
+            <h3 v-if="paths.length === 1">{{ paths[0].fuceName }}</h3>
+            <el-breadcrumb v-if="paths.length > 1" separator-class="el-icon-arrow-right">
+              <template v-for="(item, index) in paths">
+                <el-breadcrumb-item v-if="index === 0 || index === paths.length" :key="item.fuceId">
+                  {{ item.fuceName }}
+                </el-breadcrumb-item>
+                <el-breadcrumb-item v-else :key="item.fuceId" :to="{ path: item.fuceResource }">
+                  {{ item.fuceName }}
+                </el-breadcrumb-item>
+              </template>
+            </el-breadcrumb>
           </div>
-          <div class="right">{{ orgName }}</div>
+          <div v-if="orgName" class="right">{{ orgName }}</div>
         </el-header>
         <!-- 只有一块的布局 -->
         <el-main v-if="!lrConfig" class="page-configure-main">
@@ -48,13 +58,37 @@ export default {
   data() {
     return {
       orgName: '',
-      checkedApp: ''
+      checkedApp: '',
+      paths: []
     }
   },
-  created() {
-    this.orgName = this.$store.state.app.orgInfo.orgName
+  mounted() {
+    if (this.$store.state.app && this.$store.state.app.orgName) {
+      this.orgName = this.$store.state.app.orgInfo.orgName
+      this.getTitle()
+    }
   },
   methods: {
+    getTitle() {
+      const path = this.$route.path
+      const orgInfo = this.$store.getters['app/orgInfo']
+      let paths = []
+      const recursion = function(arr) {
+        for (let i = 0; i < arr.length; i++) {
+          paths.push(arr[i])
+          if (arr[i].fuceResource === path) {
+            break
+          }
+          if (arr[i].childrenList.length > 0) {
+            recursion(arr[i].childrenList)
+          } else {
+            paths = []
+          }
+        }
+      }
+      recursion(orgInfo.functionList)
+      this.paths = paths
+    },
     appChange(e) {
       this.checkedApp = e
       this.$emit('appChange', e)

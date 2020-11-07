@@ -1,6 +1,7 @@
 <template>
   <div class="tn-table-con">
     <el-table
+      ref="tableNode"
       v-if="test"
       v-loading="loading"
       :max-height="tableMaxHeight"
@@ -12,6 +13,8 @@
       :row-class-name="tableRowClassName"
       stripe
       @row-click="rowClick"
+      @cell-click="cellClick"
+      @selection-change="handleSelectionChange"
     >
       <slot></slot>
       <div slot="empty">
@@ -126,8 +129,14 @@ export default {
       this.query.pageNum = 1
       this.totalCount = 0
     },
-    rowClick(e) {
-      this.$emit('row-click', e)
+    rowClick(row, column, event) {
+      this.$emit('row-click', { row, column, event })
+    },
+    cellClick(row, column, cell, event) {
+      this.$emit('cell-click', { row, column, cell, event })
+    },
+    handleSelectionChange(e) {
+      this.$emit('selection-change', e)
     },
     currentPage(e) {
       this.query.pageNum = e
@@ -184,6 +193,9 @@ export default {
     },
     getIdx(idx) {
       return (this.query.pageNum - 1) * this.query.pageSize + 1 + idx
+    },
+    node() {
+      return this.$refs.tableNode
     },
     initHeight() {
       const height = document.documentElement.clientHeight

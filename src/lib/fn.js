@@ -65,6 +65,7 @@ export default function(options) {
      */
     docIdToImg: function(docId) {
       let token = getToken()
+      if (!token) return ''
       token = token.replace('Bearer', '')
       return BASE_API + '/base/Rest/file/preview' + '?docId=' + docId + '&access_token=' + token
     }
