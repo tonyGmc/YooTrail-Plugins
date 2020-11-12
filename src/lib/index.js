@@ -5,6 +5,7 @@ import YooTitle from './components/YooTitle.vue'
 import Page from './components/Page/index.vue'
 import Mtable from './components/Mtable/index.vue'
 import File from './components/upload/file.vue'
+import UploadImg from './components/upload/img.vue'
 // 全局函数
 import fn from './fn'
 const yootrialPlugins = {
@@ -17,6 +18,8 @@ const yootrialPlugins = {
     Vue.component('YooImage', YooImage)
     // 上传文件
     Vue.component('YooUploadFile', File)
+    // 上传文件
+    Vue.component('YooUploadImg', UploadImg)
     // 标题
     Vue.component('YooTitle', YooTitle)
     // 页面框框

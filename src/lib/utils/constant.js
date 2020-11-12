@@ -143,6 +143,7 @@ export const ORG_TYPE = [
 ]
 // 临床机构单独提出来了，因为用的地方太多了
 export const ORG_RESEARCH_INSTITUTIONS = '1'
+export const ORG_TYPE_VL = APPFN_SET_VALUE_LABEL(ORG_TYPE)
 export const ORG_TYPE_NV = APPFN_SET_NAME_VALUE(ORG_TYPE)
 
 // 中心类型

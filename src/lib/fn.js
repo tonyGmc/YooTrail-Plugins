@@ -1,4 +1,5 @@
 import { getToken } from './utils/token'
+import { getAppOrgId } from './utils/index'
 /**
  * 重置数据，放置双向绑定污染
  */
@@ -60,6 +61,7 @@ export default function(options) {
     isNull,
     nameShort,
     getObjectType,
+    getAppOrgId, // 获取组织id或组织信息
     /**
      * 图片预览地址生成
      */

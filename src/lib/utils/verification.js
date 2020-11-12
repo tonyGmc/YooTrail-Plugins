@@ -1,3 +1,4 @@
+import { isIdNumber } from './index'
 // 常用的正则表达式
 const regs = {
   mobile: /^1[3456789]\d{9}$/, // 手机
@@ -21,10 +22,21 @@ const validReg = (name, reg) => {
 
 // 特殊校验
 const validFn = {
+  // 手机和固话校验
   mobileAndPhone() {
     return (rule, value, callback) => {
-      if (!regs.mobile.test(value) && !regs.phone.test(value)) {
+      if (value && !regs.mobile.test(value) && !regs.phone.test(value)) {
         callback(`手机号码或固定号码格式不正确`)
+      } else {
+        callback()
+      }
+    }
+  },
+  // 身份证校验
+  idCard() {
+    return (rule, value, callback) => {
+      if (!isIdNumber(value)) {
+        callback(`身份证号格式不正确`)
       } else {
         callback()
       }

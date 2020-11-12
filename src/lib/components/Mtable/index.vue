@@ -14,6 +14,7 @@
       stripe
       @row-click="rowClick"
       @cell-click="cellClick"
+      @expand-change="expandChange"
       @selection-change="handleSelectionChange"
     >
       <slot></slot>
@@ -134,6 +135,9 @@ export default {
     },
     cellClick(row, column, cell, event) {
       this.$emit('cell-click', { row, column, cell, event })
+    },
+    expandChange({ row, expandedRows }) {
+      this.$emit('expand-change', { row, expandedRows })
     },
     handleSelectionChange(e) {
       this.$emit('selection-change', e)

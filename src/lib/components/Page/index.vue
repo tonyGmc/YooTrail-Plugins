@@ -1,6 +1,6 @@
 <template>
   <div id="page-configure">
-    <AppSelect v-if="selectApp" @change="appChange" />
+    <AppSelect v-if="selectApp" :show-inner-app="showInnerApp" @change="appChange" />
     <div class="relative-full" :class="{ 'page-select-app': selectApp }">
       <el-container class="page-configure relative-full">
         <el-header class="page-configure-header">
@@ -38,10 +38,18 @@
 </template>
 
 <script>
+import AppSelect from './AppSelect'
 export default {
+  components: {
+    AppSelect
+  },
   // 是否需要选择App
   props: {
     selectApp: {
+      type: Boolean,
+      default: false
+    },
+    showInnerApp: {
       type: Boolean,
       default: false
     },
@@ -49,8 +57,7 @@ export default {
      * 是否左右都有, 如果为null，则为只有一部分
      * 包含：
      * leftWidth 左侧宽度
-     */
-    lrConfig: {
+     */ lrConfig: {
       type: Object,
       default: () => null
     }
@@ -63,7 +70,7 @@ export default {
     }
   },
   mounted() {
-    if (this.$store.state.app && this.$store.state.app.orgName) {
+    if (this.$store.state.app && this.$store.state.app.orgInfo) {
       this.orgName = this.$store.state.app.orgInfo.orgName
       this.getTitle()
     }
@@ -73,21 +80,32 @@ export default {
       const path = this.$route.path
       const orgInfo = this.$store.getters['app/orgInfo']
       let paths = []
+      let isFind = false // 是否已经找到目标路由
       const recursion = function(arr) {
-        for (let i = 0; i < arr.length; i++) {
-          paths.push(arr[i])
-          if (arr[i].fuceResource === path) {
-            break
-          }
-          if (arr[i].childrenList.length > 0) {
-            recursion(arr[i].childrenList)
-          } else {
-            paths = []
+        let childPath = []
+        if (!isFind) {
+          for (let i = 0; i < arr.length; i++) {
+            if (isFind) break
+            childPath = [arr[i]]
+            if (arr[i].fuceResource === path) {
+              // 如果找到目标，结束当前循环，修改标识
+              isFind = true
+              break
+            } else {
+              // eslint-disable-next-line no-lonely-if
+              if (arr[i].childrenList && arr[i].childrenList.length > 0) {
+                // 如果不是要找的目标，判断是否子路由，有就继续往下递归
+                const c = recursion(arr[i].childrenList)
+                paths = paths.concat(c)
+              }
+            }
           }
         }
+        return isFind ? childPath : []
       }
-      recursion(orgInfo.functionList)
-      this.paths = paths
+      const p = recursion(orgInfo.functionList)
+      paths = paths.concat(p)
+      this.paths = paths.reverse()
     },
     appChange(e) {
       this.checkedApp = e

@@ -75,3 +75,83 @@ export const hasPermision = function(val, _this) {
     return false
   }
 }
+
+/**
+ * 身份证校验
+ * @param {idCard} idCard
+ */
+export function isIdNumber(idCard) {
+  var regIdCard = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
+
+  if (regIdCard.test(idCard)) {
+    if (idCard.length === 18) {
+      var idCardWi = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
+      var idCardY = [1, 0, 10, 9, 8, 7, 6, 5, 4, 3, 2]
+      var idCardWiSum = 0
+      for (var i = 0; i < 17; i++) {
+        idCardWiSum += idCard.substring(i, i + 1) * idCardWi[i]
+      }
+      var idCardMod = idCardWiSum % 11
+      var idCardLast = idCard.substring(17)
+
+      if (idCardMod === 2) {
+        if (idCardLast === 'X' || idCardLast === 'x') {
+          return true
+        } else {
+          return false
+        }
+      } else {
+        if (idCardLast == idCardY[idCardMod]) {
+          return true
+        } else {
+          return false
+        }
+      }
+    }
+  } else {
+    return false
+  }
+}
+
+/**
+ * 根据身份证获取身份证，年龄，出生日期，性别
+ * @param {idCard} identityCard
+ */
+export function GetIdCardMessage(identityCard) {
+  var len = (identityCard + '').length
+  var strBirthday = ''
+  var sex = ''
+  if (len === 18) {
+    // 处理18位的身份证号码从号码中得到生日和性别代码
+    sex = identityCard.charAt(16) % 2 === 0 ? '2' : '1'
+    strBirthday = identityCard.substr(6, 4) + '-' + identityCard.substr(10, 2) + '-' + identityCard.substr(12, 2)
+  }
+  if (len === 15) {
+    sex = identityCard.charAt(15) % 2 === 0 ? '2' : '1'
+    var birthdayValue = ''
+    birthdayValue = identityCard.charAt(6) + identityCard.charAt(7)
+    if (parseInt(birthdayValue) < 10) {
+      strBirthday =
+        '20' + identityCard.substr(6, 2) + '-' + identityCard.substr(8, 2) + '-' + identityCard.substr(10, 2)
+    } else {
+      strBirthday =
+        '19' + identityCard.substr(6, 2) + '-' + identityCard.substr(8, 2) + '-' + identityCard.substr(10, 2)
+    }
+  }
+  // 时间字符串里，必须是“/”
+  var birthDate = new Date(strBirthday)
+  var nowDateTime = new Date()
+  var age = nowDateTime.getFullYear() - birthDate.getFullYear()
+  // 再考虑月、天的因素;.getMonth()获取的是从0开始的，这里进行比较，不需要加1
+  if (
+    nowDateTime.getMonth() < birthDate.getMonth() ||
+    (nowDateTime.getMonth() == birthDate.getMonth() && nowDateTime.getDate() < birthDate.getDate())
+  ) {
+    age--
+  }
+  return {
+    strBirthday,
+    sex,
+    age
+  }
+}
