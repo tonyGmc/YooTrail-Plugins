@@ -32,6 +32,17 @@ const isNull = function(obj) {
   return !obj
 }
 
+// 生成随机数
+const generateMixed = function(n) {
+  const chars = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+  let res = ''
+  for (let i = 0; i < n; i++) {
+    const id = Math.ceil(Math.random() * 9)
+    res += chars[id]
+  }
+  return res
+}
+
 /**
  * 获取对象类型
  * @param obj 传入对象
@@ -62,6 +73,7 @@ export default function(options) {
     nameShort,
     getObjectType,
     getAppOrgId, // 获取组织id或组织信息
+    generateMixed,
     /**
      * 图片预览地址生成
      */

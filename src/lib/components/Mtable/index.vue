@@ -16,6 +16,7 @@
       @cell-click="cellClick"
       @expand-change="expandChange"
       @selection-change="handleSelectionChange"
+      @current-change="currentChange"
     >
       <slot></slot>
       <div slot="empty">
@@ -88,7 +89,7 @@ export default {
     },
     subHeight: {
       type: Number,
-      default: 215
+      default: 280
     }
   },
   data() {
@@ -136,11 +137,14 @@ export default {
     cellClick(row, column, cell, event) {
       this.$emit('cell-click', { row, column, cell, event })
     },
-    expandChange({ row, expandedRows }) {
+    expandChange(row, expandedRows) {
       this.$emit('expand-change', { row, expandedRows })
     },
     handleSelectionChange(e) {
       this.$emit('selection-change', e)
+    },
+    currentChange(currentRow, oldCurrentRow) {
+      this.$emit('current-change', { currentRow, oldCurrentRow })
     },
     currentPage(e) {
       this.query.pageNum = e

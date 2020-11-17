@@ -6,6 +6,8 @@ import Page from './components/Page/index.vue'
 import Mtable from './components/Mtable/index.vue'
 import File from './components/upload/file.vue'
 import UploadImg from './components/upload/img.vue'
+import FilePreview from './components/FilePreview.vue'
+import { numberOnly, numberZf, intervalclick } from './directive'
 // 全局函数
 import fn from './fn'
 const yootrialPlugins = {
@@ -26,6 +28,14 @@ const yootrialPlugins = {
     Vue.component('Page', Page)
     // 表格
     Vue.component('Mtable', Mtable)
+    // 文件预览
+    Vue.component('FilePreview', FilePreview)
+    // 数字
+    Vue.directive('numberOnly', numberOnly)
+    // 可以输入负数 数字输入指令
+    Vue.directive('numberZf', numberZf)
+    // 连续点击
+    Vue.directive('intervalclick', intervalclick)
 
     // 虽然没有明确规定用$开头  但是大家都默认遵守这个规定
     Vue.prototype.$yootrial = fn(options)

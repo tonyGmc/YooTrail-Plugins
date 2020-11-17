@@ -65,10 +65,23 @@ export default {
       this.percent = 0
       this.fileList = fileList
       if (info.code === 0) {
-        this.imageUrl = this.$docIdToImg(info.data)
         this.fileCode = info.data
         this.$emit('change', file)
+        this.$emit('fileChange', this.getFileLObj())
       }
+    },
+    getFileLObj() {
+      const arr = []
+      this.fileList.forEach(item => {
+        const a = item.name.split('.')
+        const type = a[a.length - 1]
+        arr.push({
+          fileName: item.name,
+          fileType: '.' + type,
+          filePath: item.response.data
+        })
+      })
+      return arr
     },
     handleAvatarError() {
       this.percent = 0
@@ -80,10 +93,9 @@ export default {
     beforeUpload(file) {
       const arr = file.name.split('.')
       const type = arr[arr.length - 1].toLocaleLowerCase()
-      console.log(type)
       // 如果未给定格式，那么可以接收所有格式文件
       if (this.types.length === 0) {
-        return false
+        return true
       } else {
         // 把类型全部转为小写后判断
         let isOk = false
