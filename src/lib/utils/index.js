@@ -53,24 +53,22 @@ export const getAppOrgId = function(_this, isInfo) {
 export const hasPermision = function(val, _this) {
   // 查找用户权限
   const userAuth = getAppOrgId(_this === 'menu' ? val : _this, true)
-  // 在权限里面寻找是否有符合的fuceResource
-  if (userAuth && userAuth.functionList) {
-    const isOk = userAuth.functionList.find(item => {
-      if (_this === 'menu') {
-        return item.fuceResource === val
-      } else {
-        return item.fuceCode === val
-      }
-    })
-    if (isOk) {
-      return true
-    } else {
-      // eslint-disable-next-line no-console
-      console.log(val, '无权限')
-      return false
-    }
+  if (!userAuth) {
+    console.log(val, '无权限')
+    return false
+  }
+
+  const auths = _this === 'menu' ? userAuth.allAuthUrl : userAuth.allAuthCode
+
+  if (!auths) {
+    console.log(val, '无权限')
+    return false
+  }
+
+  // 在权限里面匹配，看是否能匹配到
+  if (auths.includes(val)) {
+    return true
   } else {
-    // eslint-disable-next-line no-console
     console.log(val, '无权限')
     return false
   }

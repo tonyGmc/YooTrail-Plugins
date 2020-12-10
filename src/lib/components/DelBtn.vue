@@ -1,6 +1,6 @@
 <template>
   <div class="del-btn">
-    <el-popconfirm v-if="!disabled" :title="title" @onConfirm="$emit('confirm')">
+    <el-popconfirm v-if="!disabled" :title="title" @confirm="$emit('confirm')">
       <a slot="reference" class="btn-a error">
         <slot />
       </a>
@@ -24,11 +24,6 @@ export default {
   },
   components: {
     BtnA
-  },
-  methods: {
-    confirm() {
-      this
-    }
   }
 }
 </script>

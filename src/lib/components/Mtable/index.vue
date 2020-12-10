@@ -33,7 +33,7 @@
         :total="totalCount"
         :page-sizes="[10, 20, 50, 100]"
         :page-size="query.pageSize"
-        :current-page="query.page"
+        :current-page="query.pageNum"
         @current-change="currentPage"
         @size-change="sizeChange"
       ></el-pagination>

@@ -35,14 +35,14 @@ export default {
         this.imageUrl = ''
         this.fileCode = ''
       } else {
-        this.imageUrl = this.$docIdToImg(fileId)
+        this.imageUrl = this.$yootrial.docIdToImg(fileId)
         this.fileCode = fileId
       }
     },
     handleAvatarSuccess(info) {
       this.loading = false
       if (info.code === 0) {
-        this.imageUrl = this.$docIdToImg(info.data)
+        this.imageUrl = this.$yootrial.docIdToImg(info.data)
         this.fileCode = info.data
         this.$emit('change', this.fileCode)
       }

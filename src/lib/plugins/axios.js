@@ -70,9 +70,7 @@ export default ({ $axios, redirect, route, store }) => {
               response = oldRes
             })
           })
-          .catch(e => {
-            console.log(e)
-          })
+          .catch(e => {})
         return response
       } else {
         Message.error({

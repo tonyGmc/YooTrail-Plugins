@@ -12,16 +12,11 @@ export default {
       jp: null
     }
   },
-  created() {
-    console.log(jsPlumb)
-  },
+  created() {},
   mounted() {
-    console.log(1)
     this.$nextTick(() => {
-      console.log(3)
       jsPlumb.draggable('item_left')
       jsPlumb.draggable('item_right')
-      console.log(document.getElementById('item_left'))
       try {
         jsPlumb.ready(() => {
           jsPlumb.connect({
@@ -29,12 +24,8 @@ export default {
             target: 'item_right'
           })
         })
-      } catch (e) {
-        console.log(e)
-      }
+      } catch (e) {}
     })
-    console.log(5)
-    console.log(2)
   }
 }
 </script>

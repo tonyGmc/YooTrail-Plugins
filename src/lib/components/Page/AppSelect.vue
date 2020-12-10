@@ -3,7 +3,7 @@
     <ul>
       <template v-for="item in appList">
         <li
-          v-if="(showInnerApp && !item.innerApplication) || !showInnerApp"
+          v-if="isShow(item)"
           :key="item.appId"
           :class="{ active: checked === item.appId }"
           @click="change(item.appId)"
@@ -39,11 +39,30 @@ export default {
     this.getApp()
   },
   methods: {
+    isShow(item) {
+      // 是否需要判断内部应用 比如 项目列表
+      const notInsideArr = ['/config/project']
+      // isNotinside为true 表示这个页面不需要显示内部应用
+      const isNotinside = notInsideArr.includes(this.$route.path)
+
+      if (isNotinside) {
+        if (item.innerApplication) {
+          return false
+        }
+        return true
+      } else {
+        // 特殊处理 配置中心角色管理不需要显示配置中心
+        if (this.$route.path === '/config/role' && item.appId === APP_ID.CONFIG) {
+          return false
+        }
+        return true
+      }
+    },
     getApp() {
       const { orgId, appId } = this.$store.state.app.orgInfo
       let url = 'sysApp/sysAppQueryOnly'
       if (appId === APP_ID.CONFIG) {
-        url = 'project/getOrgAppByOrgId'
+        url = 'project/getAdminConfigAppList'
       }
       this.$store.dispatch(url, orgId).then(res => {
         this.appList = res.data

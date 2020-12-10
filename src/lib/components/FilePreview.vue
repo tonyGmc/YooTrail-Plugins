@@ -2,18 +2,14 @@
   <div class="file-preview">
     <div class="left">
       <slot name="extend"></slot>
-      <el-tooltip
-        class="item"
-        effect="dark"
-        content="文件名称文件名称文件名称文件名称文件名称文件名称文件名称文件名称"
-        placement="top"
-      >
-        <span>文件名称文件名称文件名称文件名称文件名称文件名称文件名称文件名称</span>
+      <el-tooltip class="item" effect="dark" :content="file.fileName" placement="top">
+        <span>{{ file.fileName }}</span>
       </el-tooltip>
     </div>
-    <div class="right">
+    <div class="right" :style="{ width: showDel ? '130px' : '100px' }">
       <BtnA>预览</BtnA>
       <BtnA>下载</BtnA>
+      <BtnA v-if="showDel" type="error" @click="$emit('del-file', file)">删除</BtnA>
     </div>
   </div>
 </template>
@@ -23,9 +19,13 @@ export default {
   props: {
     file: {
       type: Object,
-      default: () => {},
+      default: () => {}
     },
-  },
+    showDel: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 
