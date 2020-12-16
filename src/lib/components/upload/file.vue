@@ -5,24 +5,32 @@
     :drag="theme === 'box'"
     :action="Base_Url"
     :headers="headers"
-    :show-file-list="theme === 'button'"
+    :show-file-list="theme === 'button' && showFileList"
     multiple
     :on-success="handleAvatarSuccess"
     :on-error="handleAvatarError"
     :before-upload="beforeUpload"
     :on-progress="progress"
+    :on-remove="remove"
+    :file-list="files"
     :disabled="percent > 0"
   >
-    <el-button v-if="theme === 'button'" type="primary" size="small" icon="el-icon-upload">
-      <template v-if="percent === 0">上传文件</template>
-      <template v-else>上传中（{{ percent }}%）...</template>
-    </el-button>
-    <template v-else>
-      <template v-if="percent === 0">
-        <i class="el-icon-upload" size="20"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+    <template v-if="$slots.default">
+      <slot v-if="percent === 0"></slot>
+      <span v-else>{{ percent }}%</span>
+    </template>
+    <template v-if="!$slots.default">
+      <el-button v-if="theme === 'button'" type="primary" size="small" icon="el-icon-upload">
+        <template v-if="percent === 0">上传文件</template>
+        <template v-else>上传中（{{ percent }}%）...</template>
+      </el-button>
+      <template v-else>
+        <template v-if="percent === 0">
+          <i class="el-icon-upload" size="20"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        </template>
+        <div v-else><i class="el-icon-loading"></i> 上传中（{{ percent }}%）...</div>
       </template>
-      <div v-else><i class="el-icon-loading"></i> 上传中（{{ percent }}%）...</div>
     </template>
   </el-upload>
 </template>
@@ -32,7 +40,15 @@ export default {
   props: {
     baseApi: {
       type: String,
-      default: ''
+      default: process.env.BASE_API
+    },
+    fileList: {
+      type: Array,
+      default: () => []
+    },
+    showFileList: {
+      type: Boolean,
+      default: true
     },
     types: {
       type: Array,
@@ -54,7 +70,22 @@ export default {
       imageUrl: '',
       fileCode: '',
       percent: 0,
-      fileList: []
+      files: []
+    }
+  },
+  watch: {
+    fileList(val) {
+      const arr = []
+      for (let i = 0; i < this.fileList.length; i++) {
+        arr.push({
+          name: this.fileList[i].fileName,
+          response: {
+            code: 0,
+            data: this.fileList[i].filePath
+          }
+        })
+      }
+      this.files = arr
     }
   },
   created() {
@@ -63,16 +94,20 @@ export default {
   methods: {
     handleAvatarSuccess(info, file, fileList) {
       this.percent = 0
-      this.fileList = fileList
+      this.files = fileList
       if (info.code === 0) {
         this.fileCode = info.data
         this.$emit('change', file)
         this.$emit('fileChange', this.getFileLObj())
       }
     },
+    remove(file, fileList) {
+      this.files = fileList
+      this.$emit('fileChange', this.getFileLObj())
+    },
     getFileLObj() {
       const arr = []
-      this.fileList.forEach(item => {
+      this.files.forEach(item => {
         const a = item.name.split('.')
         const type = a[a.length - 1]
         arr.push({
@@ -93,6 +128,14 @@ export default {
     beforeUpload(file) {
       const arr = file.name.split('.')
       const type = arr[arr.length - 1].toLocaleLowerCase()
+      if (type === 'sh' || type === 'exe' || type === 'bat') {
+        this.$message({
+          message: '禁止上传exe、bat和sh文件!',
+          type: 'warning'
+        })
+        return false
+      }
+
       // 如果未给定格式，那么可以接收所有格式文件
       if (this.types.length === 0) {
         return true
@@ -100,7 +143,6 @@ export default {
         // 把类型全部转为小写后判断
         let isOk = false
         for (let i = 0; i < this.types.length; i++) {
-          console.log(this.types[i].toLocaleLowerCase() === type)
           if (this.types[i].toLocaleLowerCase() === type) {
             isOk = true
             continue

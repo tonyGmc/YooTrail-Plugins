@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { Loading } from 'element-ui'
 // 只能输入小数后两位限制
 export function limitFloat(val, len) {
   var value = val
@@ -151,32 +152,40 @@ export const numberZf = {
   }
 }
 
-// 防止连续点击
-export const intervalclick = function(el, binding) {
-  let openDelay = false
-  el.onclick = function(e) {
-    if (openDelay) return
-    openDelay = !openDelay
-    if (!binding.value) {
-      alert('未传入Value数据！')
-      return
+//
+// 设计为两种方式
+/**
+ * 防止连续点击
+ * 接收一个参数 如： v-intervalclick="val"
+ * val 可以不传v-intervalclick 可以是数字，和boolean类型
+ * 当val是数字时，表示多少秒之后可以点击下一次，如果不传默认是2000(2秒)
+ * 当val是boolean时，表示显示全屏loading
+ */
+export const intervalclick = {
+  bind(el, binding, vnode) {
+    if (!binding.value || typeof binding.value === 'string') {
+      el.addEventListener('click', () => {
+        if (!el.disabled) {
+          el.disabled = true
+          setTimeout(() => {
+            el.disabled = false
+          }, binding.value || 2000)
+        }
+      })
     }
-    const func = binding.value['func']
-    const time = binding.value['time']
-    if (typeof time !== 'number') {
-      alert('传入等待时间错误')
-      return
-    }
-    const args = []
-    for (const key in binding.value) {
-      if (binding.value.hasOwnProperty(key)) {
-        if (key === 'func' || key === 'time') continue
-        args.push(binding.value[key])
+  },
+  update(el, binding, vnode) {
+    if (typeof binding.value === 'boolean') {
+      if (binding.value) {
+        loadingInstance = Loading.service({
+          fullscreen: true,
+          lock: true,
+          text: '请 稍 等 ',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+      } else if (loadingInstance) {
+        loadingInstance.close()
       }
     }
-    setTimeout(() => {
-      openDelay = !openDelay
-    }, time)
-    func(...args)
   }
 }

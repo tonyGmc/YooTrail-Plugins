@@ -1,5 +1,6 @@
 import BtnA from './components/BtnA.vue'
 import DelBtn from './components/DelBtn.vue'
+import SystemLog from './components/Log/index.vue'
 import YooImage from './components/YooImage.vue'
 import YooTitle from './components/YooTitle.vue'
 import Page from './components/Page/index.vue'
@@ -16,6 +17,8 @@ const yootrialPlugins = {
     Vue.component('BtnA', BtnA)
     // 带确认取消的删除按钮
     Vue.component('DelBtn', DelBtn)
+    // 系统日志
+    Vue.component('SystemLog', SystemLog)
     // img组件，加载失败显示默认图片
     Vue.component('YooImage', YooImage)
     // 上传文件
