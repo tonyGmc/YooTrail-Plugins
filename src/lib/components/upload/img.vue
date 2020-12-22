@@ -4,6 +4,9 @@
     :action="Base_Url"
     :show-file-list="false"
     :headers="headers"
+    :data="{
+      domain
+    }"
     :on-success="handleAvatarSuccess"
     :before-upload="beforeUpload"
   >
@@ -16,18 +19,39 @@
 </template>
 <script>
 import { getToken } from '../../utils/token'
+import { getAppOrgId } from '../../utils/index'
 export default {
+  props: {
+    baseApi: {
+      type: String,
+      default: process.env.BASE_API
+    }
+  },
   data() {
     return {
-      Base_Url: process.env.BASE_API + '/base/Rest/file/upload',
-      Preview_Url: process.env.BASE_API + '/base/Rest/file/preview',
+      Base_Url: '',
+      Preview_Url: '',
       headers: {
         Authorization: getToken()
       },
       loading: false,
       imageUrl: '',
-      fileCode: ''
+      fileCode: '',
+      domain: ''
     }
+  },
+  created() {
+    const orginfo = getAppOrgId(this, true)
+    if (orginfo) {
+      this.domain = orginfo.appCode.toLocaleLowerCase()
+      if (this.domain === 'config') this.domain = 'platform'
+      if (this.domain === 'ctmsmaintain') this.domain = 'ctms'
+      if (this.domain === 'capturemaintain') this.domain = 'capture'
+    } else {
+      this.domain = 'platform'
+    }
+    this.Base_Url = this.baseApi + '/base/Rest/file/upload'
+    this.Preview_Url = this.baseApi + '/base/Rest/file/preview'
   },
   methods: {
     initImg(fileId) {

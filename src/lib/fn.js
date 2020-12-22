@@ -1,5 +1,6 @@
 import { getToken } from './utils/token'
 import { getAppOrgId } from './utils/index'
+import { Loading } from 'element-ui'
 /**
  * 重置数据，放置双向绑定污染
  */
@@ -62,6 +63,21 @@ const getObjectType = function(obj) {
   return type
 }
 
+let loadingInstance
+export function loading_start() {
+  loadingInstance = Loading.service({
+    fullscreen: true,
+    lock: true,
+    text: '请 稍 等 ',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.7)'
+  })
+}
+
+export function loading_end() {
+  loadingInstance.close()
+}
+
 export default function(options) {
   let BASE_API = ''
   if (options) {
@@ -74,6 +90,8 @@ export default function(options) {
     getObjectType,
     getAppOrgId, // 获取组织id或组织信息
     generateMixed,
+    loading_start,
+    loading_end,
     /**
      * 图片预览地址生成
      */

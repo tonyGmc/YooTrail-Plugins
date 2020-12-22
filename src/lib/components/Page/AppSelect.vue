@@ -2,12 +2,7 @@
   <div class="app-select">
     <ul>
       <template v-for="item in appList">
-        <li
-          v-if="isShow(item)"
-          :key="item.appId"
-          :class="{ active: checked === item.appId }"
-          @click="change(item.appId)"
-        >
+        <li :key="item.appId" :class="{ active: checked.appId === item.appId }" @click="change(item)">
           <YooImage :src="$yootrial.docIdToImg(item.iconFileId)" />
           {{ item.appName }}
         </li>
@@ -32,7 +27,7 @@ export default {
   data() {
     return {
       appList: [],
-      checked: ''
+      checked: {}
     }
   },
   created() {
@@ -52,7 +47,7 @@ export default {
         return true
       } else {
         // 特殊处理 配置中心角色管理不需要显示配置中心
-        if (this.$route.path === '/config/role' && item.appId === APP_ID.CONFIG) {
+        if (['/config/role', '/config/user/setting'].includes(this.$route.path) && item.appId === APP_ID.CONFIG) {
           return false
         }
         return true
@@ -65,23 +60,25 @@ export default {
         url = 'project/getAdminConfigAppList'
       }
       this.$store.dispatch(url, orgId).then(res => {
-        this.appList = res.data
-        if (this.showInnerApp) {
-          // 如果只显示内部应用
-          const obj = this.appList.find(item => !item.innerApplication)
-          if (obj) this.checked = obj.appId
-        } else {
-          this.checked = this.appList[0].appId
+        const arr = []
+        res.data.forEach(item => {
+          if (this.isShow(item)) {
+            arr.push(item)
+          }
+        })
+        this.appList = arr
+        if (arr.length > 0) {
+          this.checked = arr[0]
+          this.$emit('change', this.checked)
         }
-        this.$emit('change', this.checked)
       })
     },
-    change(e) {
-      if (e === this.checked) {
+    change(app) {
+      if (app.appId === this.checked.appId) {
         return false
       }
-      this.checked = e
-      this.$emit('change', e)
+      this.checked = app
+      this.$emit('change', this.checked)
     }
   }
 }

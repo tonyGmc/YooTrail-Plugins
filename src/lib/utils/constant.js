@@ -137,6 +137,11 @@ export const ORG_TYPE = [
   },
   {
     value: '5',
+    label: 'SMO',
+    name: 'SMO'
+  },
+  {
+    value: '99',
     label: '研究机构科室',
     name: 'RESEARCH_INSTITUTIONS_DEPARTMENT'
   }

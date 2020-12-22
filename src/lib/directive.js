@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { hasPermision } from './utils/index'
 import { Loading } from 'element-ui'
 // 只能输入小数后两位限制
 export function limitFloat(val, len) {
@@ -161,6 +162,7 @@ export const numberZf = {
  * 当val是数字时，表示多少秒之后可以点击下一次，如果不传默认是2000(2秒)
  * 当val是boolean时，表示显示全屏loading
  */
+let loadingInstance
 export const intervalclick = {
   bind(el, binding, vnode) {
     if (!binding.value || typeof binding.value === 'string') {
@@ -188,4 +190,31 @@ export const intervalclick = {
       }
     }
   }
+}
+
+// 权限指令
+export const auth = {
+  bind(el, binding, vnode) {},
+  inserted(el, binding, vnode) {
+    // 传入字符串
+    if (typeof binding.value === 'string') {
+      if (!hasPermision(binding.value, vnode.context)) {
+        el.parentNode && el.parentNode.removeChild(el)
+      }
+    }
+    // 传入数组
+    if (Array.isArray(binding.value)) {
+      let yes = false
+      for (let i = 0; i < binding.value.length; i++) {
+        if (hasPermision(binding.value[i], vnode.context)) {
+          yes = true
+          break
+        }
+      }
+      if (!yes) {
+        el.parentNode && el.parentNode.removeChild(el)
+      }
+    }
+  },
+  unbind(el, binding) {}
 }

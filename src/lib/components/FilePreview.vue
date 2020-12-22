@@ -7,8 +7,8 @@
       </el-tooltip>
     </div>
     <div class="right" :style="{ width: showDel ? '130px' : '100px' }">
-      <BtnA>预览</BtnA>
-      <BtnA>下载</BtnA>
+      <BtnA @click="preview()">预览</BtnA>
+      <BtnA @click="download()">下载</BtnA>
       <BtnA v-if="showDel" type="error" @click="$emit('del-file', file)">删除</BtnA>
     </div>
   </div>
@@ -24,6 +24,21 @@ export default {
     showDel: {
       type: Boolean,
       default: false
+    },
+    baseApi: {
+      type: String,
+      default: ''
+    }
+  },
+  methods: {
+    preview() {
+      const fileUrl = `https://ethics.tonoinfo.com/doc/yootrial/test/file/download?docId=${
+        this.file.filePath
+      }&fileName=${this.file.filePath}-${new Date() * 1}-${this.file.fileName}`
+      window.open('https://ow365.cn/?i=17462&ssl=1&furl=' + fileUrl, '_blank')
+    },
+    download() {
+      window.open(this.baseApi + `/base/Rest/file/download?docId=${this.file.filePath}&fileName=${this.file.fileName}`)
     }
   }
 }

@@ -5,8 +5,10 @@
     :drag="theme === 'box'"
     :action="Base_Url"
     :headers="headers"
+    :data="{
+      domain
+    }"
     :show-file-list="theme === 'button' && showFileList"
-    multiple
     :on-success="handleAvatarSuccess"
     :on-error="handleAvatarError"
     :before-upload="beforeUpload"
@@ -36,6 +38,7 @@
 </template>
 <script>
 import { getToken } from '../../utils/token'
+import { getAppOrgId } from '../../utils/index'
 export default {
   props: {
     baseApi: {
@@ -70,7 +73,8 @@ export default {
       imageUrl: '',
       fileCode: '',
       percent: 0,
-      files: []
+      files: [],
+      domain: ''
     }
   },
   watch: {
@@ -90,6 +94,15 @@ export default {
   },
   created() {
     this.Base_Url = this.baseApi + '/base/Rest/file/upload'
+    const orginfo = getAppOrgId(this, true)
+    if (orginfo) {
+      this.domain = orginfo.appCode.toLocaleLowerCase()
+      if (this.domain === 'config') this.domain = 'platform'
+      if (this.domain === 'ctmsmaintain') this.domain = 'ctms'
+      if (this.domain === 'capturemaintain') this.domain = 'capture'
+    } else {
+      this.domain = 'platform'
+    }
   },
   methods: {
     handleAvatarSuccess(info, file, fileList) {
