@@ -1,7 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
 
-console.log(process.env.NODE_ENV === 'development' ? './src/main.js' : './src/lib/index.js')
 module.exports = {
   // entry: './src/main.js',
   entry: process.env.NODE_ENV === 'development' ? './src/main.js' : './src/lib/index.js',

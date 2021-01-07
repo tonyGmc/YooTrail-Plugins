@@ -1,5 +1,5 @@
 import { getToken } from './utils/token'
-import { getAppOrgId } from './utils/index'
+import { getAppOrgId, filePreview } from './utils/index'
 import { Loading } from 'element-ui'
 /**
  * 重置数据，放置双向绑定污染
@@ -31,6 +31,15 @@ const isNull = function(obj) {
     return false
   }
   return !obj
+}
+
+// 文件下载
+const fileDownload = function(baseApi) {
+  return function(file) {
+    window.open(
+      baseApi + `/base/Rest/file/download?docId=${file.filePath}&fileName=${encodeURIComponent(file.fileName)}`
+    )
+  }
 }
 
 // 生成随机数
@@ -86,6 +95,8 @@ export default function(options) {
   return {
     newData,
     isNull,
+    fileDownload: fileDownload(BASE_API),
+    filePreview,
     nameShort,
     getObjectType,
     getAppOrgId, // 获取组织id或组织信息

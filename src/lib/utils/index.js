@@ -153,3 +153,13 @@ export function GetIdCardMessage(identityCard) {
     age
   }
 }
+
+// 文件预览
+export function filePreview(env, file) {
+  if (env === 'development') env = 'dev'
+  if (env === 'production') env = 'prod'
+  const fileUrl = `https://ethics.tonoinfo.com/doc/yootrial/${env}/file/download?docId=${file.filePath}&fileName=${
+    file.filePath
+  }-${new Date() * 1}-${encodeURIComponent(file.fileName)}`
+  window.open('https://ow365.cn/?i=17462&ssl=1&furl=' + fileUrl, '_blank')
+}

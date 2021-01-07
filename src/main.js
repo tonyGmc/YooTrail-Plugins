@@ -10,7 +10,7 @@ import locale from 'element-ui/lib/locale/lang/en'
 Vue.use(ElementUI, { locale })
 
 import yootrialPlugins from './lib/index.js'
-Vue.use(yootrialPlugins)
+Vue.use(yootrialPlugins, { BASE_API: process.env.VUE_APP_BASE_API })
 
 new Vue({
   el: '#app',

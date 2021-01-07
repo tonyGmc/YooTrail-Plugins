@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { filePreview } from '../utils/index'
 export default {
   props: {
     file: {
@@ -28,17 +29,25 @@ export default {
     baseApi: {
       type: String,
       default: ''
+    },
+    test: {
+      type: String,
+      default: ''
+    },
+    env: {
+      type: String,
+      default: 'test'
     }
   },
   methods: {
     preview() {
-      const fileUrl = `https://ethics.tonoinfo.com/doc/yootrial/test/file/download?docId=${
-        this.file.filePath
-      }&fileName=${this.file.filePath}-${new Date() * 1}-${this.file.fileName}`
-      window.open('https://ow365.cn/?i=17462&ssl=1&furl=' + fileUrl, '_blank')
+      filePreview(this.env, this.file)
     },
     download() {
-      window.open(this.baseApi + `/base/Rest/file/download?docId=${this.file.filePath}&fileName=${this.file.fileName}`)
+      window.open(
+        this.baseApi +
+          `/base/Rest/file/download?docId=${this.file.filePath}&fileName=${encodeURIComponent(this.file.fileName)}`
+      )
     }
   }
 }

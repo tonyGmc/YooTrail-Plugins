@@ -131,12 +131,12 @@ export default {
     padding: 30px 16px;
   }
   .page-configure-main {
-    padding: 24px;
+    padding: 0 24px 24px;
   }
 }
 .page-configure-header {
   padding: 0 28px;
-  height: 64px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: space-between;

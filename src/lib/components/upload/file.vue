@@ -22,16 +22,16 @@
       <span v-else>{{ percent }}%</span>
     </template>
     <template v-if="!$slots.default">
-      <el-button v-if="theme === 'button'" type="primary" size="small" icon="el-icon-upload">
-        <template v-if="percent === 0">上传文件</template>
-        <template v-else>上传中（{{ percent }}%）...</template>
+      <el-button :disabled="disabled" v-if="theme === 'button'" type="primary" size="small" icon="el-icon-upload">
+        <template v-if="percent === 0">{{ btnName }}</template>
+        <template v-else>上传中（{{ percent }}%）</template>
       </el-button>
       <template v-else>
         <template v-if="percent === 0">
           <i class="el-icon-upload" size="20"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
         </template>
-        <div v-else><i class="el-icon-loading"></i> 上传中（{{ percent }}%）...</div>
+        <div v-else><i class="el-icon-loading"></i> 上传中（{{ percent }}%）</div>
       </template>
     </template>
   </el-upload>
@@ -49,6 +49,10 @@ export default {
       type: Array,
       default: () => []
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     showFileList: {
       type: Boolean,
       default: true
@@ -56,6 +60,14 @@ export default {
     types: {
       type: Array,
       default: () => []
+    },
+    btnName: {
+      type: String,
+      default: '上传文件'
+    },
+    size: {
+      type: String,
+      default: ''
     },
     // 主题 'button' 和 'box'
     theme: {
@@ -116,6 +128,7 @@ export default {
     },
     remove(file, fileList) {
       this.files = fileList
+      this.$emit('removeFile', file)
       this.$emit('fileChange', this.getFileLObj())
     },
     getFileLObj() {
@@ -125,6 +138,7 @@ export default {
         const type = a[a.length - 1]
         arr.push({
           fileName: item.name,
+          fileSize: item.size,
           fileType: '.' + type,
           filePath: item.response.data
         })

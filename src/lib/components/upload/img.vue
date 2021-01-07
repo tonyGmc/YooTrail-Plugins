@@ -93,6 +93,7 @@ export default {
   width: 80px;
   height: 80px;
   border: 1px solid #ddd;
+  border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;

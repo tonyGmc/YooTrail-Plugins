@@ -108,7 +108,6 @@ export default {
         height: 48px;
         display: block;
         margin: 0 auto 8px;
-        background: #fff;
       }
       padding: 16px 0;
       text-align: center;

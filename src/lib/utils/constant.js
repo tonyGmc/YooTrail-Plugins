@@ -132,7 +132,7 @@ export const ORG_TYPE = [
   },
   {
     value: '4',
-    label: 'CRO公司',
+    label: 'CRO',
     name: 'CRO'
   },
   {
@@ -168,3 +168,16 @@ export const ROLE_TYPE = [
 ]
 export const ROLE_TYPE_VL = APPFN_SET_VALUE_LABEL(ROLE_TYPE)
 export const ROLE_TYPE_NV = APPFN_SET_NAME_VALUE(ROLE_TYPE)
+
+// 角色标识
+export const ROLE_MARK = [
+  { value: 1, label: '机构角色', name: 'orgRole' },
+  { value: 2, label: '专业角色', name: 'majorRole' },
+  { value: 3, label: '伦理委员会', name: 'ethic' },
+  { value: 4, label: 'CRO', name: 'CRO' },
+  { value: 5, label: 'SMO', name: 'SMO' },
+  { value: 6, label: '申办方', name: 'sponsor' },
+  { value: 7, label: '其他', name: 'other' }
+]
+export const ROLE_MARK_VL = APPFN_SET_VALUE_LABEL(ROLE_MARK)
+export const ROLE_MARK_NV = APPFN_SET_NAME_VALUE(ROLE_MARK)

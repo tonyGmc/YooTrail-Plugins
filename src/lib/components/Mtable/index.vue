@@ -220,7 +220,7 @@ export default {
 }
 .tn-table-con {
   th .cell {
-    color: $--color-text-primary;
+    color: #333;
   }
 }
 .tn-paging {

@@ -53,7 +53,7 @@ export default {
     bottom: 0;
     margin: auto;
     width: 4px;
-    height: 16px;
+    height: 14px;
     background: $--color-primary;
   }
 }
