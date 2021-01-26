@@ -5,6 +5,7 @@
       <el-table-column type="index" label="#"></el-table-column>
       <el-table-column prop="logTypeDesc" label="日志类型" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="businessTypeDesc" label="业务类型" :show-overflow-tooltip="true"></el-table-column>
+      <el-table-column prop="businessName" label="业务名称" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="createUserName" label="操作人" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="operationTypeDes" label="操作类型" :show-overflow-tooltip="true"></el-table-column>
       <el-table-column prop="description" label="描述" :show-overflow-tooltip="true"></el-table-column>

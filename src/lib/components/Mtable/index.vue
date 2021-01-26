@@ -206,8 +206,10 @@ export default {
       return this.$refs.tableNode
     },
     initHeight() {
-      const height = document.documentElement.clientHeight
-      this.tableMaxHeight = height - this.subHeight
+      setTimeout(() => {
+        const height = document.documentElement.clientHeight
+        this.tableMaxHeight = height - this.subHeight
+      }, 100)
     }
   }
 }
