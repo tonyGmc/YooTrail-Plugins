@@ -31,7 +31,7 @@
       <el-pagination
         layout="total, sizes, prev, pager, next, jumper"
         :total="totalCount"
-        :page-sizes="[10, 20, 50, 100]"
+        :page-sizes="[12, 24, 36, 48, 60, 72, 84, 96]"
         :page-size="query.pageSize"
         :current-page="query.pageNum"
         @current-change="currentPage"
@@ -98,11 +98,11 @@ export default {
       totalCount: 0,
       loading: false,
       query: {
-        pageSize: 10,
+        pageSize: 12,
         pageNum: 1
       },
       test: false,
-      tableMaxHeight: 500
+      tableMaxHeight: 600
     }
   },
   destroyed() {
@@ -206,10 +206,8 @@ export default {
       return this.$refs.tableNode
     },
     initHeight() {
-      setTimeout(() => {
-        const height = document.documentElement.clientHeight
-        this.tableMaxHeight = height - this.subHeight
-      }, 100)
+      const height = document.documentElement.clientHeight
+      this.tableMaxHeight = height - this.subHeight
     }
   }
 }
@@ -217,6 +215,9 @@ export default {
 
 <style lang="scss">
 @import '../../scss/variables.scss';
+.el-table {
+  width: 99.9%;
+}
 .tn-table {
   height: 100%;
 }

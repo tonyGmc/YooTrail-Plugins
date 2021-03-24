@@ -111,6 +111,20 @@ export default ({ $axios, redirect, route, store }) => {
       })
       return false
     } else {
+      if (error.message && error.message === 'Network Error') {
+        Message({
+          message: '网络错误，请检查网络',
+          type: 'error'
+        })
+        return Promise.reject(error)
+      }
+      if (error.message && error.message.indexOf('timeout') !== -1) {
+        Message({
+          message: '请求超时，请检查网络',
+          type: 'error'
+        })
+        return Promise.reject(error)
+      }
       Message({
         message: '系统错误',
         type: 'error'
