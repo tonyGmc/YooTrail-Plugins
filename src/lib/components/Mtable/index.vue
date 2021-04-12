@@ -118,7 +118,7 @@ export default {
   created() {
     this.initHeight()
     // eslint-disable-next-line nuxt/no-globals-in-created
-    window.addEventListener('resize', this.initHeight, false)
+    // window.addEventListener('resize', this.initHeight, false)
     this.query = this.extend(this.query, this.queryData)
     if (this.isStartload) {
       this.loadItem()

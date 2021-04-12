@@ -73,18 +73,33 @@ const getObjectType = function(obj) {
 }
 
 let loadingInstance
-export function loading_start() {
+export function loading_start(msg) {
   loadingInstance = Loading.service({
     fullscreen: true,
     lock: true,
-    text: '请 稍 等 ',
+    text: msg || '请 稍 等 ',
     spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.7)'
+    background: 'rgba(0, 0, 0, 0.3)'
   })
 }
 
 export function loading_end() {
   loadingInstance.close()
+}
+
+
+export function loading_diy_start(str) {
+  str = str || '请稍等...'
+  const tnLoadingBox = document.createElement('div')
+  tnLoadingBox.className = 'tn-loading-box'
+  tnLoadingBox.innerHTML = `<i class="el-icon-loading"></i><div>${str}</div>`
+  document.body.appendChild(tnLoadingBox)
+}
+
+export function loading_diy_end() {
+  document.querySelectorAll('.tn-loading-box').forEach((item) => {
+    document.body.removeChild(item)
+  })
 }
 
 export default function(options) {
@@ -103,6 +118,8 @@ export default function(options) {
     generateMixed,
     loading_start,
     loading_end,
+    loading_diy_start,
+    loading_diy_end,
     /**
      * 图片预览地址生成
      */
