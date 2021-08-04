@@ -1,7 +1,7 @@
 {
   "name": "yootrial-plugins",
   "description": "yootrial 自用公共组件",
-  "version": "1.0.36",
+  "version": "1.0.56",
   "author": "gaomingchao(271128530@qq.com)",
   "license": "MIT",
   "private": false,
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "crypto": "^1.0.1",
-    "element-ui": "^2.13.2",
+    "element-ui": "2.14.1",
     "js-cookie": "^2.2.1",
     "vue": "^2.5.11"
   },

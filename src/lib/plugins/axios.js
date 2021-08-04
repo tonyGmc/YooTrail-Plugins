@@ -1,7 +1,11 @@
 import { Message } from 'element-ui'
 import { setToken, setRefreshToken, getToken, getRefreshToken, removeToken } from '../utils/token'
 import { getAppOrgId } from '../utils/index'
+import { ReLogin } from '../utils/relogin'
 import crypto from 'crypto'
+
+window.isRefresh_yoo = false
+window.refreshList_yoo = []
 
 function resetToken(axios, data) {
   return new Promise((resolve, reject) => {
@@ -17,6 +21,9 @@ function resetToken(axios, data) {
       })
       .catch(e => {
         reject(new Error('token刷新失败'))
+      })
+      .finally(() => {
+        window.isRefresh_yoo = false
       })
   })
 }
@@ -52,33 +59,59 @@ export default ({ $axios, redirect, route, store }) => {
   })
 
   $axios.onResponse(async (res, b) => {
+    if (
+      res.headers &&
+      res.headers['content-type'] &&
+      res.headers['content-type'].includes('application/octet-stream')
+    ) {
+      return res
+    }
+
     // 返回数据逻辑处理
-    const old = res.config
+    // const old = res.config
+    const config = res.config
     const code = res.data.code + ''
     // code 未10 时标识token已过期或者没有token
-    if (code === '10') {
+    if (code === '10' || code === 10) {
       let response = {}
       if (!res.config.url.includes('/oauth/token')) {
-        // 刷新token
-        await resetToken($axios, {
-          grant_type: 'refresh_token',
-          refresh_token: getRefreshToken()
-        })
-          .then(async resRsetToekn => {
-            old.headers.Authorization = getToken()
-            await $axios(old).then(oldRes => {
+        if (!window.isRefresh_yoo) {
+          window.isRefresh_yoo = true
+          // 刷新token
+          await resetToken($axios, {
+            grant_type: 'refresh_token',
+            refresh_token: getRefreshToken()
+          }).then(async resRsetToekn => {
+            config.headers.Authorization = getToken()
+            await $axios(config).then(oldRes => {
               response = oldRes
             })
           })
-          .catch(e => {})
-        return response
+          window.refreshList_yoo.forEach(el => el(getToken()))
+          window.refreshList_yoo = []
+          return response
+        } else {
+          let dt
+          await new Promise(resolve => {
+            window.refreshList_yoo.push(token => {
+              config.baseURL = ''
+              config.headers.Authorization = token
+              $axios(config).then(rr => {
+                resolve(rr)
+              })
+            })
+          }).then(rr2 => {
+            dt = rr2
+          })
+          return dt
+        }
       } else {
-        Message.error({
-          message: '登录已失效，请重新登录',
-          type: 'error'
-        })
-        removeToken()
-        redirect('/login?href=' + encodeURIComponent(route.path))
+        // removeToken()
+
+        if (getRefreshToken() !== 'locked' && document.querySelector('.account-expire-login') == null) {
+          ReLogin($axios)
+        }
+        // redirect('/login?href=' + encodeURIComponent(route.path))
       }
     } else if (code === '0' || res.data.access_token) {
       return res.data
@@ -97,17 +130,17 @@ export default ({ $axios, redirect, route, store }) => {
     // 刷新token失效了，去登录
     if (err && err.status === 400) {
       if (error.response.data.error_description.includes('Invalid refresh token')) {
-        Message({
-          message: '登录凭证已过期，请重新登录',
-          type: 'error'
-        })
-        removeToken()
-        redirect('/login?href=' + encodeURIComponent(route.path))
+        // removeToken()
+
+        if (getRefreshToken() !== 'locked' && document.querySelector('.account-expire-login') == null) {
+          ReLogin($axios)
+        }
+        // redirect('/login?href=' + encodeURIComponent(route.path))
         return false
       }
       Message({
-        message: '操作失败',
-        type: 'error'
+        message: err.data && err.data.error_description ? err.data.error_description : '操作失败',
+        type: 'error',
       })
       return false
     } else {
@@ -118,7 +151,7 @@ export default ({ $axios, redirect, route, store }) => {
         })
         return Promise.reject(error)
       }
-      if (error.message && error.message.indexOf('timeout') !== -1) {
+      if (error.message && error.message.includes('timeout')) {
         Message({
           message: '请求超时，请检查网络',
           type: 'error'

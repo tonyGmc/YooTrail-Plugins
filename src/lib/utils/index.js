@@ -54,14 +54,14 @@ export const hasPermision = function(val, _this) {
   // 查找用户权限
   const userAuth = getAppOrgId(_this === 'menu' ? val : _this, true)
   if (!userAuth) {
-    console.log(val, '无权限')
+    // console.log(val, '无权限')
     return false
   }
 
   const auths = _this === 'menu' ? userAuth.allAuthUrl : userAuth.allAuthCode
 
   if (!auths) {
-    console.log(val, '无权限')
+    // console.log(val, '无权限')
     return false
   }
 
@@ -69,7 +69,7 @@ export const hasPermision = function(val, _this) {
   if (auths.includes(val)) {
     return true
   } else {
-    console.log(val, '无权限')
+    // console.log(val, '无权限')
     return false
   }
 }

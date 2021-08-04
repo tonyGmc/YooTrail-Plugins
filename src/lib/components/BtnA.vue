@@ -1,5 +1,5 @@
 <template>
-  <a class="btn-a" :class="type + (disabled ? 'disabled' : '')" @click="ck"><slot /></a>
+  <a class="btn-a" :class="type + (disabled ? ' disabled' : '')" @click="ck"><slot /></a>
 </template>
 
 <script>

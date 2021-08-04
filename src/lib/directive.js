@@ -2,19 +2,28 @@ import Vue from 'vue'
 import { hasPermision } from './utils/index'
 import { Loading } from 'element-ui'
 // 只能输入小数后两位限制
-export function limitFloat(val, len) {
-  var value = val
-  value = value.replace(/[^\d.]/g, '')
-  value = value.replace(/\.{2,}/g, '.')
-  value = value
-    .replace('.', '$#$')
-    .replace(/\./g, '')
-    .replace('$#$', '.')
-  value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+function limitZf(val, len) {
+  var value = val;
+  var t = value.charAt(0);
+  value = value.replace(/[^\d.]/g, '');
+  value = value.replace(/\.{2,}/g, '.');
+  value = value.replace('.', '$#$').replace(/\./g, '').replace('$#$', '.');
+  value = value.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');
   if (value.indexOf('.') < 0 && value !== '') {
-    value = parseFloat(value)
+    value = parseFloat(value);
   }
-  return value
+  if (t === '0') {
+    let dian = ''
+    if (value.length > 1) {
+      dian = value.charAt(value.length - 1)
+      dian = dian === '.' ? '.' : ''
+    }
+    const toVal = (value * 1).toString()
+    if (toVal.charAt(0) !== '0') {
+      value = '0' + toVal + dian;
+    }
+  }
+  return value === '.' ? '' : value;
 }
 
 // 只能输入小数后两位限制 可为负数
@@ -217,4 +226,33 @@ export const auth = {
     }
   },
   unbind(el, binding) {}
+}
+
+// 监听大写
+export const capLocked = {
+  bind(el) {
+    el.onkeypress = function(e) {
+      var valueCapsLock = e.keyCode ? e.keyCode : e.which // 按键
+      var valueShift = e.shiftKey ? e.shiftKey : valueCapsLock == 16 ? true : false // shift键是否按住
+      const daxe = el.querySelector('.tono-daxe')
+      if (
+        (valueCapsLock >= 65 && valueCapsLock <= 90 && !valueShift) || // 输入了大写字母，并且shift键没有按住，说明Caps Lock打开
+        (valueCapsLock >= 97 && valueCapsLock <= 122 && valueShift)
+      ) {
+        if (!daxe) {
+          const tips = document.createElement('div')
+          tips.innerText = '大写锁定'
+          tips.style.position = 'absolute'
+          tips.style.fontSize = '14px'
+          tips.style.color = '#E6A23C'
+          tips.style.bottom = '-26px'
+          tips.style.right = '0px'
+          tips.className = 'tono-daxe'
+          el.appendChild(tips)
+        }
+      } else {
+        if (daxe) el.removeChild(daxe)
+      }
+    }
+  }
 }

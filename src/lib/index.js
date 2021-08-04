@@ -9,7 +9,7 @@ import File from './components/upload/file.vue'
 import UploadImg from './components/upload/img.vue'
 import YooTips from './components/YooTips.vue'
 import FilePreview from './components/FilePreview.vue'
-import { numberOnly, numberZf, intervalclick, auth } from './directive'
+import { numberOnly, numberZf, intervalclick, auth, capLocked } from './directive'
 // 全局函数
 import fn from './fn'
 const yootrialPlugins = {
@@ -44,6 +44,8 @@ const yootrialPlugins = {
     Vue.directive('intervalclick', intervalclick)
     // 权限
     Vue.directive('auth', auth)
+    // 大写监听
+    Vue.directive('capLocked', capLocked)
 
     // 虽然没有明确规定用$开头  但是大家都默认遵守这个规定
     Vue.prototype.$yootrial = fn(options)
