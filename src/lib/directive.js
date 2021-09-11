@@ -205,6 +205,7 @@ export const intervalclick = {
 export const auth = {
   bind(el, binding, vnode) {},
   inserted(el, binding, vnode) {
+    // 如果还报错，可以先把按钮的display 调休none ,然后定时器2秒后删除
     // 传入字符串
     if (typeof binding.value === 'string') {
       if (!hasPermision(binding.value, vnode.context)) {

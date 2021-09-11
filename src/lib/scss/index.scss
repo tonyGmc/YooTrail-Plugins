@@ -18,7 +18,7 @@
     color: $--color-success;
   }
   &:hover {
-    color: #0578b5;
+    color: rgba($--color-primary, 0.8);
   }
 }
 
@@ -35,7 +35,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  color: #3cace7;
+  color: $--color-primary;
   i {
     font-size: 30px;
     display: block;

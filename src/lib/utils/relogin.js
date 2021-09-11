@@ -23,7 +23,7 @@ export function ReLogin(axios) {
   div2.appendChild(tips)
 
   const account = document.createElement('div')
-  let userInfo = sessionStorage.getItem('userInfo')
+  let userInfo = localStorage.getItem('userInfo')
 
   if (!userInfo) {
     removeToken()

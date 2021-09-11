@@ -27,23 +27,23 @@ export function removeToken() {
 
 export function getCache(type) {
   try {
-    return JSON.parse(sessionStorage.getItem(type))
+    return JSON.parse(localStorage.getItem(type))
   } catch (e) {
-    return sessionStorage.getItem(type)
+    return localStorage.getItem(type)
   }
 }
 
 export function setCache(type, info) {
   info = typeof info === 'object' ? JSON.stringify(info) : info
-  return sessionStorage.setItem(type, info)
+  return localStorage.setItem(type, info)
 }
 
 export function removeCache(type) {
   if (type) {
-    sessionStorage.removeItem(type)
+    localStorage.removeItem(type)
   } else {
     // 如果type没有值，清除全部
-    sessionStorage.clear()
+    localStorage.clear()
   }
 }
 

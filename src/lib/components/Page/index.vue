@@ -5,17 +5,20 @@
       <el-container class="page-configure relative-full">
         <el-header class="page-configure-header">
           <div class="left">
-            <h3 v-if="paths.length === 1">{{ paths[0].fuceName }}</h3>
-            <el-breadcrumb v-if="paths.length > 1" separator-class="el-icon-arrow-right">
-              <template v-for="(item, index) in paths">
-                <el-breadcrumb-item v-if="index === 0 || index === paths.length" :key="item.fuceId">
-                  {{ item.fuceName }}
-                </el-breadcrumb-item>
-                <el-breadcrumb-item v-else :key="item.fuceId" :to="{ path: item.fuceResource }">
-                  {{ item.fuceName }}
-                </el-breadcrumb-item>
-              </template>
-            </el-breadcrumb>
+            <slot v-if="$slots.title" name="title"></slot>
+            <template v-if="paths.length > 0 && !$slots.title">
+              <h3>{{ paths[0].fuceName }}</h3>
+              <el-breadcrumb v-if="paths.length > 1" separator-class="el-icon-arrow-right">
+                <template v-for="(item, index) in paths">
+                  <el-breadcrumb-item v-if="index === 0 || index === paths.length" :key="item.fuceId">
+                    {{ item.fuceName }}
+                  </el-breadcrumb-item>
+                  <el-breadcrumb-item v-else :key="item.fuceId" :to="{ path: item.fuceResource }">
+                    {{ item.fuceName }}
+                  </el-breadcrumb-item>
+                </template>
+              </el-breadcrumb>
+            </template>
           </div>
           <div v-if="orgName" class="right">{{ orgName }}</div>
         </el-header>
@@ -47,11 +50,11 @@ export default {
   props: {
     selectApp: {
       type: Boolean,
-      default: false
+      default: false,
     },
     showInnerApp: {
       type: Boolean,
-      default: false
+      default: false,
     },
     /**
      * 是否左右都有, 如果为null，则为只有一部分
@@ -59,14 +62,18 @@ export default {
      * leftWidth 左侧宽度
      */ lrConfig: {
       type: Object,
-      default: () => null
-    }
+      default: () => null,
+    },
+    pageType: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       orgName: '',
       checkedApp: '',
-      paths: []
+      paths: [],
     }
   },
   mounted() {
@@ -75,13 +82,27 @@ export default {
       this.getTitle()
     }
   },
+  computed: {
+    getSolt() {
+      return this.$slots
+    },
+  },
   methods: {
     getTitle() {
       const path = this.$route.path
-      const orgInfo = this.$store.getters['app/orgInfo']
+      let functionList = []
+      let info
+      if (!this.pageType) {
+        info = this.$store.getters['app/orgInfo']
+      } else {
+        info = this.$store.getters['app/projectAuth']
+      }
+      if (info && info.functionList) {
+        functionList = info.functionList
+      }
       let paths = []
       let isFind = false // 是否已经找到目标路由
-      const recursion = function(arr) {
+      const recursion = function (arr) {
         let childPath = []
         if (!isFind) {
           for (let i = 0; i < arr.length; i++) {
@@ -103,15 +124,15 @@ export default {
         }
         return isFind ? childPath : []
       }
-      const p = recursion(orgInfo.functionList)
+      const p = recursion(functionList)
       paths = paths.concat(p)
       this.paths = paths.reverse()
     },
     appChange(e) {
       this.checkedApp = e
       this.$emit('appChange', e)
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -134,15 +155,29 @@ export default {
     padding: 0 24px 24px;
   }
 }
-.page-configure-header {
-  padding: 0 28px;
-  height: 52px;
+.page-configure-header.el-header {
+  padding: 24px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #eeeeee;
+  height: auto !important;
   h3 {
+    font-size: 24px;
+    margin: 0;
+    color: $--color-text-primary;
+  }
+  .el-breadcrumb {
+    margin-top: 8px;
+    .el-breadcrumb__inner {
+      color: $--color-text-tips;
+    }
+    .el-breadcrumb__item:last-child .el-breadcrumb__inner {
+      color: $--color-text-primary;
+    }
+  }
+  .right {
     font-size: 16px;
+    color: $--color-text-tips;
+    padding-top: 6px;
   }
 }
 </style>

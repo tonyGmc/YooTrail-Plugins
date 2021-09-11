@@ -1,7 +1,7 @@
 <template>
   <div class="yoo-title">
     <div class="left">
-      <h4>{{ title }}</h4>
+      <h3>{{ title }}</h3>
       <div class="second-title">
         <slot name="secondTitle"></slot>
       </div>
@@ -25,6 +25,11 @@ export default {
 
 <style lang="scss">
 @import '../scss/variables.scss';
+.el-card__body {
+  .yoo-title {
+    margin-top: -16px;
+  }
+}
 .yoo-title {
   font-size: 14px;
   height: 44px;
@@ -32,8 +37,16 @@ export default {
   justify-content: space-between;
   align-items: center;
   position: relative;
-  padding-left: 12px;
   border-bottom: 1px solid $--border-color-base;
+  &::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 16px;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+  }
   h4 {
     margin: 0;
   }

@@ -65,9 +65,10 @@ export default {
       type: String,
       default: '上传文件'
     },
+    // 文件大小限制， 单位Mb
     size: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 200
     },
     // 主题 'button' 和 'box'
     theme: {
@@ -158,6 +159,17 @@ export default {
       if (type === 'sh' || type === 'exe' || type === 'bat') {
         this.$message({
           message: '禁止上传exe、bat和sh文件!',
+          type: 'warning'
+        })
+        return false
+      }
+
+      // 文件大小限制
+      // 把文件大小转为b
+      const limitSizeB = this.size * 1024 * 1024
+      if (file.size > limitSizeB) {
+        this.$message({
+          message: '文件大小不能超过' + this.size + 'Mb',
           type: 'warning'
         })
         return false

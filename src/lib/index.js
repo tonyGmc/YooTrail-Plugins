@@ -9,6 +9,9 @@ import File from './components/upload/file.vue'
 import UploadImg from './components/upload/img.vue'
 import YooTips from './components/YooTips.vue'
 import FilePreview from './components/FilePreview.vue'
+import YooInfoCell from './components/YooInfoCell.vue'
+import NullTips from './components/NullTips.vue'
+import SearchInput from './components/SearchInput.vue'
 import { numberOnly, numberZf, intervalclick, auth, capLocked } from './directive'
 // 全局函数
 import fn from './fn'
@@ -36,6 +39,12 @@ const yootrialPlugins = {
     Vue.component('FilePreview', FilePreview)
     // 问号文字提醒
     Vue.component('YooTips', YooTips)
+    // 文字label加内容 如：姓名：张三
+    Vue.component('YooInfoCell', YooInfoCell)
+    // 缺省提示
+    Vue.component('NullTips', NullTips)
+    // 搜索框
+    Vue.component('SearchInput', SearchInput)
     // 数字
     Vue.directive('numberOnly', numberOnly)
     // 可以输入负数 数字输入指令

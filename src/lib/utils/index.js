@@ -42,7 +42,7 @@ export const getAppOrgId = function(_this, isInfo) {
   if (type) {
     type = type.toLocaleUpperCase()
   }
-  const org = JSON.parse(sessionStorage.getItem(type))
+  const org = JSON.parse(localStorage.getItem(type))
   if (!isInfo) {
     return org.orgId
   } else {
@@ -162,4 +162,37 @@ export function filePreview(env, file) {
     file.filePath
   }-${new Date() * 1}-${encodeURIComponent(file.fileName)}`
   window.open('https://ow365.cn/?i=17462&ssl=1&furl=' + fileUrl, '_blank')
+}
+
+// 显示loading
+export function showFullLoading(loadingText) {
+  hideFullLoading()
+  const loadingBox = document.createElement('div')
+  loadingBox.className = 'full-loading-spinner'
+  loadingBox.innerHTML = `<div class="full-loading-spinner">
+        <div style="width: 60px; height: 60px" class="spinner spinner--mikepad">
+          <div style="transform: scale(1.93548)" class="spinner-inner">
+            <div class="binding"></div>
+            <div class="pad">
+              <div class="line line1"></div>
+              <div class="line line2"></div>
+              <div class="line line3"></div>
+            </div>
+          </div>
+        </div>
+        <span class="loading-text">${loadingText || '请求中...'}</span>
+      </div>`
+  document.body.appendChild(loadingBox)
+}
+
+// 隐藏loading
+export function hideFullLoading() {
+  const div = document.querySelectorAll('.full-loading-spinner')
+  div.forEach((el) => {
+    try {
+      if (el) {
+        document.body.removeChild(el)
+      }
+    } catch {}
+  })
 }

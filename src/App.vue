@@ -1,12 +1,15 @@
 <template>
   <div id="diagramContainer">
-    <div id="item_left" class="item"></div>
-    <div id="item_right" class="item" style="margin-left: 50px"></div>
+    <NullTips />
+    <!-- <div id="item_left" class="item"></div>
+    <div id="item_right" class="item" style="margin-left: 50px"></div> -->
   </div>
 </template>
 <script>
-import { jsPlumb } from 'jsplumb'
+// import { jsPlumb } from 'jsplumb'
+import NullTips from './lib/components/NullTips'
 export default {
+  components: { NullTips },
   data() {
     return {
       jp: null
@@ -14,18 +17,18 @@ export default {
   },
   created() {},
   mounted() {
-    this.$nextTick(() => {
-      jsPlumb.draggable('item_left')
-      jsPlumb.draggable('item_right')
-      try {
-        jsPlumb.ready(() => {
-          jsPlumb.connect({
-            source: 'item_left',
-            target: 'item_right'
-          })
-        })
-      } catch (e) {}
-    })
+    // this.$nextTick(() => {
+    //   jsPlumb.draggable('item_left')
+    //   jsPlumb.draggable('item_right')
+    //   try {
+    //     jsPlumb.ready(() => {
+    //       jsPlumb.connect({
+    //         source: 'item_left',
+    //         target: 'item_right'
+    //       })
+    //     })
+    //   } catch (e) {}
+    // })
   }
 }
 </script>

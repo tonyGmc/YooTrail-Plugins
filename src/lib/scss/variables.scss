@@ -1,14 +1,14 @@
 /* 改变主题色变量 */
-$--color-primary: #3cace7;
+$--color-primary: #0177fd;
 
 /* 危险颜色 */
-$--color-danger: #f85252;
+$--color-danger: #f85d25;
 
 /* 成功颜色 */
-$--color-success: #60c354;
+$--color-success: #07c160;
 
 /*  */
-$--color-warning: #f7a427;
+$--color-warning: #f85d25;
 
 /* 主要文字颜色 */
 $--color-text-primary: #333333;
@@ -26,7 +26,8 @@ $--color-menu-bg: #252d2f;
 $--background: #f2f2f2;
 
 /* 一级边框颜色 */
-$--border-color-base: #eee;
+$--border-color-base: #e6e6e6;
+
 /* 深色边框 */
 $--border-dark: #eeeeee;
 
@@ -34,4 +35,10 @@ $--border-dark: #eeeeee;
 $app-select-bar-width: 90px;
 
 /* 灰色背景色 */
-$background-gray: #f6f6f6;
+$background-gray: #f5f6f7;
+
+/* 小圆角 */
+$small-radius: 6px;
+
+/* 大圆角 */
+$big-radius: 12px;
